@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Chat IA — Interfaz (solo HTML)</title>
+    <meta name="description" content="Interfaz accesible de chat para integrar con un servicio de IA. Archivo solo HTML con estilo embebido.">
+    <style>
+      :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;}
+      body{margin:0;padding:1.25rem;background:#f7f7fb;color:#0b1220}
+      .container{max-width:900px;margin:0 auto;background:#fff;border-radius:8px;box-shadow:0 6px 18px rgba(9,18,28,.06);overflow:hidden}
+      header{padding:1rem 1.25rem;border-bottom:1px solid #eef2f7}
+      h1{margin:0;font-size:1.125rem}
+      main{display:flex;flex-direction:column;height:70vh;min-height:420px}
+      .chat-log{flex:1;overflow:auto;padding:1rem;list-style:none;margin:0;display:flex;flex-direction:column}
+      .message{padding:.6rem .8rem;border-radius:12px;max-width:78%;margin-bottom:.6rem}
+      .user{background:#e8f0ff;align-self:flex-end}
+      .bot{background:#f1f3f5;align-self:flex-start}
+      form{display:flex;gap:.5rem;padding:1rem;border-top:1px solid #eef2f7}
+      textarea{flex:1;min-height:56px;padding:.6rem;border:1px solid #dfe6ef;border-radius:8px;resize:vertical}
+      button{padding:.6rem 1rem;border-radius:8px;border:0;background:#0b5fff;color:#fff;cursor:pointer}
+      .meta{padding:.75rem 1.25rem;font-size:.875rem;color:#425066;border-top:1px solid #f1f4f8;background:#fbfcff}
+      .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+      @media (max-width:640px){.container{margin:0 12px}}
+    </style>
+  </head>
+  <body>
+    <div class="container" role="application" aria-labelledby="title">
+      <header>
+        <h1 id="title">Chat con Inteligencia Artificial</h1>
+      </header>
+
+      <main>
+        <ul class="chat-log" id="chatLog" role="log" aria-live="polite" aria-relevant="additions">
+          <li class="message bot" data-sender="assistant">Hola — soy la interfaz. Escribe tu consulta abajo y presiona "Enviar".</li>
+        </ul>
+
+        <form id="chatForm" action="/api/ai-chat" method="post">
+          <label for="prompt" class="sr-only">Mensaje</label>
+          <textarea id="prompt" name="prompt" placeholder="Escribe tu mensaje para la IA..." required aria-label="Mensaje para la IA"></textarea>
+          <button type="submit">Enviar</button>
+        </form>
+      </main>
+
+      <div class="meta" aria-hidden="false">
+        <strong>Instrucciones:</strong> Esta página es una interfaz HTML pensada para integrarse con un backend.
+        Para funcionar, configura un endpoint que reciba POST en <code>/api/ai-chat</code> (o cambia el atributo action del formulario) y que devuelva respuesta que el servidor inserte en la conversación.
+      </div>
+    </div>
+  </body>
+</html>
