@@ -2,6 +2,9 @@
 // NOTA: NUNCA pongan claves de API en el cliente. Definir OPENAI_API_KEY en
 // variables de entorno en el servidor.
 
+// Cargar variables desde .env (si existe)
+require('dotenv').config();
+
 const express = require('express');
 const fetch = require('node-fetch');
 const app = express();
