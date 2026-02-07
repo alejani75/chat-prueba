@@ -1,0 +1,35 @@
+name: Deploy frontend to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare `public` directory
+        run: |
+          mkdir -p public
+          # Copia los archivos estáticos de frontend
+          cp -f index.html public/ || true
+          cp -f styles.css public/ || true
+          cp -f script.js public/ || true
+          # Copia carpeta de assets si existe
+          if [ -d "assets" ]; then cp -R assets public/; fi
+
+      - name: Upload artifact to GitHub Pages
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
