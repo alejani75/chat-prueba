@@ -1,0 +1,30 @@
+name: Deploy develop -> gh-pages
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  deploy-to-gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare public directory
+        run: |
+          mkdir -p public
+          cp -f index.html public/ || true
+          cp -f styles.css public/ || true
+          cp -f script.js public/ || true
+          if [ -d "assets" ]; then cp -R assets public/; fi
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          user_name: github-actions
+          user_email: github-actions@github.com
+          commit_message: "Deploy from develop -> gh-pages"
