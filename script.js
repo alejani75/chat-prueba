@@ -35,9 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     promptEl.disabled = true;
 
     const statusEl = showTemporaryStatus('... pensando');
+    const url = form.action || 'http://localhost:3000/api/ai-chat';
 
     try {
-      const res = await fetch(form.action || '/api/ai-chat', {
+      console.log(`Enviando petición a: ${url}`);
+      const res = await fetch(url, {
         method: form.method || 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt }),
@@ -58,8 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (err) {
       statusEl.remove();
-      appendMessage('bot', 'Error: ' + (err.message || 'No se recibió respuesta'));
-      console.error(err);
+      const msg = `❌ Error: ${err.message || 'No se pudo conectar'}.\n\nAsegúrate de:\n1. Ejecutar: node server.js\n2. Exportar OPENAI_API_KEY\n3. Acceder a esta página desde http://localhost:5000 (no localhost:3000)`;
+      appendMessage('bot', msg);
+      console.error('Fetch error:', err);
     } finally {
       promptEl.disabled = false;
       promptEl.focus();
