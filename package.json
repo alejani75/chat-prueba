@@ -1,0 +1,29 @@
+{
+  "name": "chat-prueba",
+  "version": "1.0.0",
+  "description": "Interfaz de chat con IA potenciada por OpenAI — diseño responsivo, arquitectura segura.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node -r dotenv/config server.js",
+    "start:prod": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alejani75/chat-prueba.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/alejani75/chat-prueba/issues"
+  },
+  "homepage": "https://github.com/alejani75/chat-prueba#readme",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "http-server": "^14.1.1",
+    "node-fetch": "^3.3.2"
+  }
+}

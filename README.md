@@ -20,7 +20,7 @@ Estructura del repositorio
 - [index.html](index.html) — Interfaz del usuario (HTML semántico + accesible).
 - [styles.css](styles.css) — Estilos responsivos con paleta verde pastel y negro.
 - [script.js](script.js) — Cliente AJAX que envía mensajes sin recargar la página.
-- [server.js](server.js) — Proxy Express seguro para OpenAI (usa `OPENAI_API_KEY` de env).
+- [server.js](server.js) — Proxy Express seguro para IA (usa `GOOGLE_CLOUD_API_KEY` o `OPENAI_API_KEY` de env).
 - [README.md](README.md) — Este documento.
 
 Instalación y ejecución
@@ -30,7 +30,10 @@ Instalación y ejecución
 
 - Node.js ≥ 14.x
 - npm o yarn
-- Clave de API de OpenAI (https://platform.openai.com/account/api-keys)
+- Clave de API de Google Cloud o OpenAI (según el proveedor que uses).
+
+   - Google Cloud: crea/consulta la API Key en Google Cloud Console.
+   - OpenAI: https://platform.openai.com/account/api-keys (opcional, como fallback)
 
 ### Pasos
 
@@ -48,33 +51,42 @@ Instalación y ejecución
 
 3. **Configurar la clave de API (sin commitear):**
    
-   En macOS/Linux:
+   En macOS/Linux (ejemplo con Google Cloud):
    ```bash
-   export OPENAI_API_KEY="tu_clave_aqui"
+   export GOOGLE_CLOUD_API_KEY="tu_api_key_aqui"
    ```
    
    En Windows (PowerShell):
    ```powershell
-   $env:OPENAI_API_KEY="tu_clave_aqui"
+   $env:GOOGLE_CLOUD_API_KEY="tu_api_key_aqui"
    ```
    
    O crear un archivo `.env` (que NO debe ser commiteado):
    ```bash
    # .env
-   OPENAI_API_KEY=tu_clave_aqui
+   GOOGLE_CLOUD_API_KEY=tu_api_key_aqui
+   # Opcional: fallback para OpenAI
+   # OPENAI_API_KEY=tu_clave_aqui
    ```
    
-   Luego instalar `dotenv` para cargarlo:
+   Luego instalar `dotenv` para cargarlo en desarrollo:
    ```bash
    npm install dotenv
    ```
 
 4. **Ejecutar el servidor:**
-   ```bash
-   node server.js
-   ```
    
-   El servidor escuchará en `http://localhost:3000`.
+    - En desarrollo (carga automática de `.env` mediante `dotenv`):
+       ```bash
+       npm start
+       ```
+
+    - En producción (si tu plataforma ya provee variables de entorno):
+       ```bash
+       npm run start:prod
+       ```
+
+    El servidor escuchará en `http://localhost:3000`.
 
 5. **Abrir la interfaz:**
    
@@ -103,7 +115,7 @@ Seguridad
 ---------
 
 - ✅ La clave de API NUNCA aparece en el código fuente.
-- ✅ Se usa `process.env.OPENAI_API_KEY` en el backend.
+- ✅ Se usa `process.env.GOOGLE_CLOUD_API_KEY` (o `process.env.OPENAI_API_KEY`) en el backend.
 - ✅ El cliente solo comunica con tu servidor, no con OpenAI directamente.
 - ✅ `.env` y `node_modules` están en `.gitignore` (crea uno si es necesario).
 
@@ -122,7 +134,8 @@ Si prefieres un archivo `.env` para desarrollo local:
 2. Actualiza `server.js`:
    ```javascript
    require('dotenv').config();
-   const apiKey = process.env.OPENAI_API_KEY;
+   // Preferir GOOGLE_CLOUD_API_KEY y usar OPENAI_API_KEY como fallback
+   const apiKey = process.env.GOOGLE_CLOUD_API_KEY || process.env.OPENAI_API_KEY;
    // ... resto del código
    ```
 
@@ -165,8 +178,8 @@ Para desplegar en producción (Heroku, Railway, Vercel, etc.):
 Resolución de problemas
 -----------------------
 
-**Error: "OPENAI_API_KEY no configurada"**
-- Verifica que hayas exportado la variable: `export OPENAI_API_KEY="..."`
+**Error: "API key no configurada"**
+- Verifica que hayas exportado la variable: `export GOOGLE_CLOUD_API_KEY="..."` o `export OPENAI_API_KEY="..."`
 - O usa dotenv con un archivo `.env` válido.
 
 **Error: "CORS error"**

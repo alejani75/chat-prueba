@@ -13,8 +13,15 @@ app.post('/api/ai-chat', async (req, res) => {
   const prompt = (req.body && req.body.prompt) || '';
   if (!prompt) return res.status(400).json({ error: 'Falta el campo prompt' });
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'OPENAI_API_KEY no configurada en el servidor' });
+  // Preferir clave de Google Cloud si está definida, si no usar la de OpenAI
+  const apiKey = process.env.GOOGLE_CLOUD_API_KEY || process.env.OPENAI_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'API key no configurada en el servidor (GOOGLE_CLOUD_API_KEY o OPENAI_API_KEY)' });
+
+  // Modo de prueba local: si la API key es 'test_key_local', devolver respuesta mock
+  if (apiKey === 'test_key_local') {
+    const reply = `Respuesta de prueba para prompt: ${prompt}`;
+    return res.json({ reply, raw: { mock: true, prompt } });
+  }
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
